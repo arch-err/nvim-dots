@@ -65,6 +65,7 @@ return require("packer").startup(function(use)
 	use("tpope/vim-commentary")
 	use("tpope/vim-surround")
 	use("tribela/vim-transparent")
+	use("ThePrimeagen/htmx-lsp")
 	use("xiyaowong/telescope-emoji.nvim")
 	use("mfussenegger/nvim-dap")
 	use({
@@ -78,4 +79,19 @@ return require("packer").startup(function(use)
 	use({ "kdheepak/lazygit.nvim", requires = "nvim-lua/plenary.nvim" })
 	use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
+
+	use({
+		"aurum77/live-server.nvim",
+		run = function()
+			require("live_server.util").install()
+		end,
+		cmd = { "LiveServer", "LiveServerStart", "LiveServerStop" },
+	})
+	use({
+		"pmizio/typescript-tools.nvim",
+		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		config = function()
+			require("typescript-tools").setup({})
+		end,
+	})
 end)

@@ -36,6 +36,8 @@ vim.keymap.set("n", "<leader><Tab>", "<cmd>retab!<cr>", { noremap = true, silent
 
 vim.keymap.set("n", "<leader>p", '<cmd>lua require("duck").hatch("", 3)<CR>')
 
+vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = false })
+vim.keymap.set("n", "gd", "gdzz", { noremap = true, silent = false })
 ---
 
 vim.keymap.set("n", "<C-r>", ':!vimrunner "%:p" "%:p:h" & disown<CR><CR>', { noremap = true, silent = false })

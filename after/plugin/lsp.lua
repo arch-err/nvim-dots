@@ -8,7 +8,6 @@ require("mason-lspconfig").setup({
 		"helm_ls",
 		"lua_ls",
 		"rust_analyzer",
-		"tsserver",
 		"pylsp",
 		"perlnavigator",
 		"yamlls",
@@ -16,6 +15,8 @@ require("mason-lspconfig").setup({
 		"dockerls",
 		"emmet_language_server",
 		"bashls",
+		"bashls",
+		"eslint",
 	},
 })
 
@@ -96,6 +97,7 @@ local server_mappings = {
 	emmet_language_server = "html",
 	bashls = "sh",
 	pylsp = "python",
+	eslint = "javascript",
 }
 for server_name, filetype in pairs(server_mappings) do
 	lspconfig[server_name].setup({
@@ -138,6 +140,11 @@ lspconfig.helm_ls.setup({
 	capabilities = capabilities,
 	filetypes = { "helm" },
 	root_dir = util.root_pattern("values.yaml", "Values.yaml", ".git"),
+})
+lspconfig.htmx.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	filetypes = { "html" },
 })
 
 -- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
