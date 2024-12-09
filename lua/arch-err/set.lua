@@ -1,7 +1,7 @@
 vim.opt.guicursor = ""
 
 vim.opt.title = true
-vim.opt.titlestring = 'NeoVim | %(%{expand(\"%:~:.:h\")}%)/%t'
+vim.opt.titlestring = 'NeoVim | %(%{expand("%:~:.:h")}%)/%t'
 
 vim.opt.nu = true
 vim.opt.nuw = 1
@@ -16,7 +16,7 @@ vim.opt.autoindent = true
 -- vim.opt.foldmethod = "indent"
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.o.foldcolumn = '0' -- '0' is not bad
+vim.o.foldcolumn = "0" -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = false
@@ -31,10 +31,10 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.local/share/nvim/undodir"
 vim.opt.undofile = true
-vim.opt.dir="/tmp/nvim"
+vim.opt.dir = "/tmp/nvim"
 
 vim.opt.list = true
-vim.opt.listchars = { tab = '▏ ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = "▏ ", trail = "·", nbsp = "␣" }
 
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
@@ -51,9 +51,8 @@ vim.opt.updatetime = 50
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 vim.opt.cursorline = true
-
 
 -- -- Save view (folds)
 -- vim.api.nvim_create_autocmd({"BufWinLeave"}, {
@@ -68,31 +67,29 @@ vim.opt.cursorline = true
 -- })
 
 -- Slides
-vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-  pattern = {"*.vs"},
-  callback = function()
-    require("j03y.vimslides")
-  end,
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+	pattern = { "*.vs" },
+	callback = function()
+		require("j03y.vimslides")
+	end,
 })
 
-vim.o.clipboard = 'unnamedplus'
-vim.o.mouse = 'a'
+vim.o.clipboard = "unnamedplus"
+vim.o.mouse = "a"
 
-vim.o.completeopt = 'menuone,noselect'
-
+vim.o.completeopt = "menuone,noselect"
 
 -- Remap for dealing with word wrap
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank()
-  end,
-  group = highlight_group,
-  pattern = '*',
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
 })

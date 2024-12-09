@@ -6,6 +6,8 @@ vim.keymap.set("n", "U", "<C-r>")
 
 vim.keymap.set("n", "<C-'>", '"vyiw:%s/v//g<Left><Left>')
 vim.keymap.set("v", "<C-'>", '"vy:%s/v//g<Left><Left>')
+vim.keymap.set("n", "<leader><C-'>", '"vyiw:s/v//g<Left><Left>')
+vim.keymap.set("v", "<leader><C-'>", '"vy:s/v//g<Left><Left>')
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
@@ -53,10 +55,6 @@ vim.keymap.set("n", "<C-z>", "zfip")
 vim.keymap.set("n", "<C-s>", "mpvip:sort<CR>`p", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>r", ":!vimrunner <C-r>% & disown<CR><CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>h", ":bp<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>j", ":enew<CR>:Telescope find_files hidden=true no_ignore=true<CR>", { silent = true })
-vim.keymap.set("n", "<leader>k", ":bd<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<leader>l", ":bn<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>n", ":enew<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>w", ":w ")
 vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", { noremap = true, silent = true })
@@ -65,3 +63,42 @@ vim.keymap.set("n", "<leader>s", "mpvip:sort<CR>`p", { noremap = true, silent = 
 vim.keymap.set("n", "<leader>a", "za")
 
 vim.keymap.set("v", "<C-s>", ":sort<CR>`p", { noremap = true, silent = true })
+
+vim.keymap.set(
+	"n",
+	"<C-y>",
+	":FloatermNew! --title=Yazi --wintype=float --width=0.92 --height=0.95 ya && exit<CR>",
+	{ noremap = true, silent = true }
+)
+
+local function handleMDCheckboxes(mode)
+	local cur_line = vim.api.nvim_get_current_line()
+
+	local cb_start = string.find(cur_line, "- %[[ xX]%]")
+
+	if cb_start then
+		local new_char = cur_line:sub(cb_start + 3, cb_start + 3) == " " and "x" or " "
+		vim.api.nvim_set_current_line(
+			cur_line:sub(1, cb_start + 1) .. "[" .. new_char .. "]" .. cur_line:sub(cb_start + 5)
+		)
+	else
+		local first_non_whitespace_pos = string.find(cur_line, "%S")
+
+		if first_non_whitespace_pos == nil then
+			vim.api.nvim_set_current_line("- [ ]")
+			if mode == "n" then
+				vim.api.nvim_feedkeys("V=A ", "n", false)
+			end
+		else
+			vim.api.nvim_set_current_line(
+				cur_line:sub(1, first_non_whitespace_pos - 1) .. "- [ ] " .. cur_line:sub(first_non_whitespace_pos)
+			)
+		end
+	end
+end
+vim.keymap.set("n", "<C-c>", function()
+	handleMDCheckboxes("n")
+end)
+vim.keymap.set("i", "<C-c>", function()
+	handleMDCheckboxes("i")
+end)

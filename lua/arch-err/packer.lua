@@ -68,6 +68,8 @@ return require("packer").startup(function(use)
 	use("ThePrimeagen/htmx-lsp")
 	use("xiyaowong/telescope-emoji.nvim")
 	use("mfussenegger/nvim-dap")
+	use("arakkkkk/kanban.nvim")
+	use("voldikss/vim-floaterm")
 	use({
 		"olexsmir/gopher.nvim",
 		build = function()
