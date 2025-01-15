@@ -64,6 +64,11 @@ vim.keymap.set("n", "<leader>a", "za")
 
 vim.keymap.set("v", "<C-s>", ":sort<CR>`p", { noremap = true, silent = true })
 
+vim.keymap.set("n", "<leader>h", "<cmd>wincmd h<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>j", "<cmd>wincmd j<CR>", { silent = true })
+vim.keymap.set("n", "<leader>k", "<cmd>wincmd k<CR>", { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>l", "<cmd>wincmd l<CR>", { noremap = true, silent = true })
+
 vim.keymap.set(
 	"n",
 	"<C-y>",
@@ -74,7 +79,7 @@ vim.keymap.set(
 local function handleMDCheckboxes(mode)
 	local cur_line = vim.api.nvim_get_current_line()
 
-	local cb_start = string.find(cur_line, "- %[[ xX]%]")
+	local cb_start = string.find(cur_line, "- %[[ xX/?-]%]")
 
 	if cb_start then
 		local new_char = cur_line:sub(cb_start + 3, cb_start + 3) == " " and "x" or " "
