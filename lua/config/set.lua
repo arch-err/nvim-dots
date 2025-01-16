@@ -54,26 +54,6 @@ vim.opt.splitbelow = true
 vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 
--- -- Save view (folds)
--- vim.api.nvim_create_autocmd({"BufWinLeave"}, {
---   pattern = {"*.*"},
---   desc = "save view (folds), when closing file",
---   command = "mkview",
--- })
--- vim.api.nvim_create_autocmd({"BufWinEnter"}, {
---   pattern = {"*.*"},
---   desc = "load view (folds), when opening file",
---   command = "silent! loadview"
--- })
-
--- Slides
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-	pattern = { "*.vs" },
-	callback = function()
-		require("j03y.vimslides")
-	end,
-})
-
 vim.o.clipboard = "unnamedplus"
 vim.o.mouse = "a"
 
@@ -92,16 +72,4 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 	group = highlight_group,
 	pattern = "*",
-})
-
-vim.api.nvim_create_user_command("K8sB", function()
-	-- vim.api.nvim_feedkeys("gg", "n", false)
-	vim.api.nvim_command("/metadata")
-	vim.api.nvim_command("/  name:")
-	vim.api.nvim_feedkeys('f:f l"ayiW', "n", false)
-	vim.api.nvim_command('echo "' .. vim.fn.getreg("a") .. '"')
-	vim.api.nvim_feedkeys(":w a.yaml", "n", false)
-end, {
-	desc = "My custom command description",
-	nargs = "*", -- Allow optional arguments
 })
