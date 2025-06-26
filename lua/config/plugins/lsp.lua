@@ -1,12 +1,21 @@
 return {
+	-- {
+	-- 	"kevinhwang91/nvim-ufo",
+	-- 	enabled = false,
+	-- 	dependencies = {
+	-- 		"kevinhwang91/nvim-ufo",
+	-- 		"kevinhwang91/promise-async",
+	-- 	},
+	-- 	config = require("ufo").setup(),
+	-- },
 	{
-		"kevinhwang91/nvim-ufo",
+		"zeioth/garbage-day.nvim",
 		enabled = true,
-		dependencies = {
-			"kevinhwang91/nvim-ufo",
-			"kevinhwang91/promise-async",
+		dependencies = "neovim/nvim-lspconfig",
+		-- event = "VeryLazy",
+		opts = {
+			grace_period = 300,
 		},
-		config = require('ufo').setup()
 	},
 	{
 		"VonHeikemen/lsp-zero.nvim",
@@ -17,7 +26,7 @@ return {
 			"neovim/nvim-lspconfig",
 
 			-- ufo
-			"kevinhwang91/nvim-ufo",
+			-- "kevinhwang91/nvim-ufo",
 			"kevinhwang91/promise-async",
 
 			-- Autocompletion
@@ -28,6 +37,8 @@ return {
 			"L3MON4D3/LuaSnip",
 			"rafamadriz/friendly-snippets",
 			"saadparwaiz1/cmp_luasnip",
+			"uga-rosa/cmp-dictionary",
+			"NvChad/nvim-colorizer.lua",
 		},
 		config = function()
 			local lspconfig = require("lspconfig")
@@ -49,10 +60,12 @@ return {
 					"bashls",
 					"bashls",
 					"eslint",
+					"tailwindcss",
 				},
 			})
 
-			local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+			local capabilities =
+				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 			capabilities.textDocument.foldingRange = {
 				dynamicRegistration = false,
 				lineFoldingOnly = true,
@@ -84,7 +97,6 @@ return {
 				end
 			end
 
-
 			local cmp = require("cmp")
 			local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -96,6 +108,7 @@ return {
 					{ name = "nvim_lua" },
 					{ name = "buffer" },
 					{ name = "luasnip" },
+					{ name = "dictionary", keyword_length = 2 },
 				},
 				snippet = {
 					expand = function(args)
@@ -114,6 +127,11 @@ return {
 				}),
 			})
 
+			-- require("cmp_dictionary").setup({
+			-- 	paths = { "../../../dicts/sv.dict", "../../../dicts/en.dict" },
+			-- 	exact_length = 2,
+			-- })
+
 			-- ----------
 			--   LSPs
 			-- ----------
@@ -121,13 +139,15 @@ return {
 			local server_mappings = {
 				dockerls = "dockerfile",
 				cssls = "css",
-				yamlls = "yaml",
+				-- yamlls = "yaml",
 				perlnavigator = "perl",
 				emmet_language_server = "html",
 				bashls = "sh",
 				pylsp = "python",
 				eslint = "javascript",
+				-- solidity = "solidity",
 			}
+
 			for server_name, filetype in pairs(server_mappings) do
 				lspconfig[server_name].setup({
 					on_attach = on_attach,
@@ -176,8 +196,31 @@ return {
 				filetypes = { "html" },
 			})
 
-			-- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+			-- lspconfig.tailwindcss.setup({
+			-- 	on_attach = on_attach,
+			-- 	capabilities = capabilities,
+			-- 	filetypes = {
+			-- 		"html",
+			-- 		"css",
+			-- 		"javascript",
+			-- 		"javascriptreact",
+			-- 		"typescript",
+			-- 		"typescriptreact",
+			-- 		"vue",
+			-- 		"svelte",
+			-- 		"astro",
+			-- 		"templ",
+			-- 		"gohtml",
+			-- 	},
+			-- })
 
-		end
+			require("colorizer").setup({
+				user_default_options = {
+					tailwind = true,
+				},
+			})
+
+			-- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
+		end,
 	},
 }

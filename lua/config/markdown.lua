@@ -29,3 +29,30 @@ end)
 vim.keymap.set("i", "<C-c>", function()
 	handleMDCheckboxes("i")
 end)
+
+vim.keymap.set("n", "<C-i>", "<cmd>PasteImage<cr>", { noremap = true, silent = true })
+vim.keymap.set("i", "<C-i>", "<cr><cmd>PasteImage<cr>", { noremap = true, silent = true })
+
+function SmartPaste(p)
+	-- local clipboard_content = vim.fn.getreg("+")
+	local config_dir = vim.fn.stdpath("config")
+	local script_path = config_dir .. "/bash/detect_clipboard_image.sh"
+	local result = vim.fn.system(script_path)
+
+	if result == "true" then
+		require("img-clip").paste_image()
+		return
+	end
+
+	vim.cmd("normal! " .. p) -- Normal paste
+end
+
+-- Map a key to this function
+-- vim.keymap.set("n", "p", SmartPaste("p"), { noremap = true })
+-- vim.keymap.set("n", "P", SmartPaste("P"), { noremap = true })
+vim.keymap.set("n", "p", function()
+	SmartPaste("p")
+end, { noremap = true })
+vim.keymap.set("n", "P", function()
+	SmartPaste("P")
+end, { noremap = true })
