@@ -1,87 +1,58 @@
 return {
-	-- {
-	-- 	"kevinhwang91/nvim-ufo",
-	-- 	enabled = false,
-	-- 	dependencies = {
-	-- 		"kevinhwang91/nvim-ufo",
-	-- 		"kevinhwang91/promise-async",
-	-- 	},
-	-- 	config = require("ufo").setup(),
-	-- },
 	{
-		"zeioth/garbage-day.nvim",
+		"neovim/nvim-lspconfig",
 		enabled = true,
-		dependencies = "neovim/nvim-lspconfig",
-		-- event = "VeryLazy",
-		opts = {
-			grace_period = 300,
-		},
-	},
-	{
-		"VonHeikemen/lsp-zero.nvim",
-		enabled = true,
+		vim.apu,
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-			"neovim/nvim-lspconfig",
-
-			-- ufo
-			-- "kevinhwang91/nvim-ufo",
-			"kevinhwang91/promise-async",
-
-			-- Autocompletion
-			"hrsh7th/nvim-cmp",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
-			"hrsh7th/cmp-path",
-			"L3MON4D3/LuaSnip",
-			"rafamadriz/friendly-snippets",
-			"saadparwaiz1/cmp_luasnip",
-			"uga-rosa/cmp-dictionary",
-			"NvChad/nvim-colorizer.lua",
 		},
-		config = function()
-			local lspconfig = require("lspconfig")
-			local util = require("lspconfig/util")
-
-			require("mason").setup({})
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"gopls",
-					"helm_ls",
-					"lua_ls",
-					"rust_analyzer",
-					"pylsp",
-					"perlnavigator",
-					"yamlls",
-					"cssls",
-					"dockerls",
-					"emmet_language_server",
-					"bashls",
-					"bashls",
-					"eslint",
-					"tailwindcss",
+		opts = {
+			servers = {
+				lua_ls = {
+					settings = {
+						Lua = { diagnostics = { globals = { "vim" } } },
+					},
 				},
-			})
+				gopls = {},
+				helm_ls = {},
+				rust_analyzer = {},
+				pylsp = {},
+				perlnavigator = {},
+				yamlls = {},
+				cssls = {},
+				dockerls = {},
+				emmet_language_server = {},
+				bashls = {},
+				eslint = {},
+				tailwindcss = {},
+				-- <++> = {},
+			},
+		},
+		config = function(_, opts)
+			local lspconfig = require("lspconfig")
+			-- local util = require("lspconfig/util")
 
-			local capabilities =
-				require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-			capabilities.textDocument.foldingRange = {
-				dynamicRegistration = false,
-				lineFoldingOnly = true,
+			local capabilities = {
+				textDocument = {
+					foldingRange = {
+						dynamicRegistration = false,
+						lineFoldingOnly = true,
+					},
+				},
 			}
 
 			local on_attach = function(client, bufnr)
-				local opts = { buffer = bufnr, remap = false }
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-				vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
-				vim.keymap.set("n", "<c-i>d", vim.diagnostic.goto_next, opts)
-				vim.keymap.set("n", "<c-i>D", vim.diagnostic.goto_prev, opts)
-				vim.keymap.set("n", "<c-i>t", "<cmd>Telescope diagnostics<cr>", opts)
-				vim.keymap.set("n", "<c-i>c", vim.lsp.buf.code_action, opts)
-				vim.keymap.set("n", "<c-i>r", vim.lsp.buf.rename, opts)
+				local oa_opts = { buffer = bufnr, remap = false }
+				vim.keymap.set("n", "K", vim.lsp.buf.hover, oa_opts)
+				vim.keymap.set("n", "gd", vim.lsp.buf.definition, oa_opts)
+				vim.keymap.set("n", "gi", vim.lsp.buf.implementation, oa_opts)
+				vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, oa_opts)
+				vim.keymap.set("n", "<c-i>d", vim.diagnostic.goto_next, oa_opts)
+				vim.keymap.set("n", "<c-i>D", vim.diagnostic.goto_prev, oa_opts)
+				vim.keymap.set("n", "<c-i>t", "<cmd>Telescope diagnostics<cr>", oa_opts)
+				vim.keymap.set("n", "<c-i>c", vim.lsp.buf.code_action, oa_opts)
+				vim.keymap.set("n", "<c-i>r", vim.lsp.buf.rename, oa_opts)
 				--	 vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
 				--	 vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
 				--	 vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
@@ -97,130 +68,27 @@ return {
 				end
 			end
 
-			local cmp = require("cmp")
-			local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
-			require("luasnip.loaders.from_vscode").lazy_load()
-			cmp.setup({
-				sources = {
-					{ name = "path" },
-					{ name = "nvim_lsp" },
-					{ name = "nvim_lua" },
-					{ name = "buffer" },
-					{ name = "luasnip" },
-					{ name = "dictionary", keyword_length = 2 },
-				},
-				snippet = {
-					expand = function(args)
-						require("luasnip").lsp_expand(args.body)
-					end,
-				},
-				window = {
-					completion = cmp.config.window.bordered(),
-					documentation = cmp.config.window.bordered(),
-				},
-				mapping = cmp.mapping.preset.insert({
-					["<C-k>"] = cmp.mapping.select_prev_item(cmp_select),
-					["<C-j>"] = cmp.mapping.select_next_item(cmp_select),
-					["<Enter>"] = cmp.mapping.confirm({ select = true }),
-					-- ['<C-Space>'] = cmp.mapping.complete(),
-				}),
-			})
-
-			-- require("cmp_dictionary").setup({
-			-- 	paths = { "../../../dicts/sv.dict", "../../../dicts/en.dict" },
-			-- 	exact_length = 2,
-			-- })
-
-			-- ----------
-			--   LSPs
-			-- ----------
-
-			local server_mappings = {
-				dockerls = "dockerfile",
-				cssls = "css",
-				-- yamlls = "yaml",
-				perlnavigator = "perl",
-				emmet_language_server = "html",
-				bashls = "sh",
-				pylsp = "python",
-				eslint = "javascript",
-				-- solidity = "solidity",
-			}
-
-			for server_name, filetype in pairs(server_mappings) do
-				lspconfig[server_name].setup({
-					on_attach = on_attach,
-					capabilities = capabilities,
-					filetypes = { filetype },
-				})
+			for server, config in pairs(opts.servers) do
+				-- passing config.capabilities to blink.cmp merges with the capabilities in your
+				-- `opts[server].capabilities, if you've defined it
+				config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+				config.on_attach = on_attach
+				lspconfig[server].setup(config)
 			end
 
-			lspconfig.gopls.setup({
-				-- cmd = {"gopls"},
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "go", "gomod", "gowork", "gotmpl" },
-				root_dir = util.root_pattern("go.work", "go.mod", ".git"),
-				settings = {
-					gopls = {
-						completeUnimported = true,
-						usePlaceholders = true,
-						analyses = {
-							unusedparams = true,
-						},
-					},
-				},
+			require("mason").setup({})
+			require("mason-lspconfig").setup({
+				ensure_installed = vim.tbl_keys(opts.servers),
 			})
-			vim.keymap.set("n", "gos", ":GoTagAdd ")
-			vim.keymap.set("n", "goS", ":GoTagRm ")
-			vim.keymap.set("n", "got", function()
-				require("neotest").run.run()
-			end)
-
-			lspconfig.lua_ls.setup({
-				settings = {
-					Lua = { diagnostics = { globals = { "vim" } } },
-				},
-			})
-
-			lspconfig.helm_ls.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "helm" },
-				root_dir = util.root_pattern("values.yaml", "Values.yaml", ".git"),
-			})
-			lspconfig.htmx.setup({
-				on_attach = on_attach,
-				capabilities = capabilities,
-				filetypes = { "html" },
-			})
-
-			-- lspconfig.tailwindcss.setup({
-			-- 	on_attach = on_attach,
-			-- 	capabilities = capabilities,
-			-- 	filetypes = {
-			-- 		"html",
-			-- 		"css",
-			-- 		"javascript",
-			-- 		"javascriptreact",
-			-- 		"typescript",
-			-- 		"typescriptreact",
-			-- 		"vue",
-			-- 		"svelte",
-			-- 		"astro",
-			-- 		"templ",
-			-- 		"gohtml",
-			-- 	},
-			-- })
-
-			require("colorizer").setup({
-				user_default_options = {
-					tailwind = true,
-				},
-			})
-
-			-- vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 		end,
+	},
+	{
+		"zeioth/garbage-day.nvim",
+		enabled = true,
+		dependencies = "neovim/nvim-lspconfig",
+		-- event = "VeryLazy",
+		opts = {
+			grace_period = 300,
+		},
 	},
 }
