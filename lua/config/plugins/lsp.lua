@@ -15,7 +15,7 @@ return {
 					},
 				},
 				gopls = {},
-				helm_ls = {},
+				-- helm_ls = {},
 				rust_analyzer = {},
 				pylsp = {},
 				perlnavigator = {},
@@ -42,7 +42,7 @@ return {
 				},
 			}
 
-			local on_attach = function(client, bufnr)
+			local on_attach = function(_, bufnr)
 				local oa_opts = { buffer = bufnr, remap = false }
 				vim.keymap.set("n", "K", vim.lsp.buf.hover, oa_opts)
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, oa_opts)
@@ -83,6 +83,14 @@ return {
 		end,
 	},
 	{
+		"NvChad/nvim-colorizer.lua",
+		opts = {
+			user_default_options = {
+				tailwind = true,
+			},
+		},
+	},
+	{
 		"zeioth/garbage-day.nvim",
 		enabled = true,
 		dependencies = "neovim/nvim-lspconfig",
@@ -90,5 +98,11 @@ return {
 		opts = {
 			grace_period = 300,
 		},
+	},
+	{
+		"qvalentin/helm-ls.nvim",
+		ft = "helm",
+		opts = {},
+		enabled = false,
 	},
 }

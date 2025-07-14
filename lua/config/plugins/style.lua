@@ -24,7 +24,6 @@ return {
 					enabled = true, -- enables the Noice cmdline UI
 					view = "cmdline_popup", -- view for rendering the cmdline. Change to `cmdline` to get a classic cmdline at the bottom
 					opts = {}, -- global options for the cmdline. See section on views
-					---@type table<string, CmdlineFormat>
 					format = {
 						-- conceal: (default=true) This will hide the text in the cmdline that matches the pattern.
 						-- view: (default is cmdline view)
@@ -201,7 +200,6 @@ return {
 				health = {
 					checker = true, -- Disable if you don't want health checks to run
 				},
-				---@type NoicePresets
 				presets = {
 					-- you can enable a preset by setting it to true, or a table that will override the preset config
 					-- you can also add custom presets that you can enable/disable with enabled=true
@@ -212,14 +210,10 @@ return {
 					lsp_doc_border = true, -- add a border to hover docs and signature help
 				},
 				throttle = 1000 / 30, -- how frequently does Noice need to check for ui updates? This has no effect when in blocking mode.
-				---@type NoiceConfigViews
-				views = {}, ---@see section on views
-				---@type NoiceRouteConfig[]
-				routes = {}, --- @see section on routes
-				---@type table<string, NoiceFilter>
-				status = {}, --- @see section on statusline components
-				---@type NoiceFormatOptions
-				format = {}, --- @see section on formatting
+				views = {},
+				routes = {},
+				status = {},
+				format = {},
 			})
 		end,
 	},
