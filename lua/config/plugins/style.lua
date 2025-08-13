@@ -10,9 +10,16 @@ return {
 	},
 	{
 		"arch-err/venomous.nvim",
-		enabled = true,
+		enabled = false,
 		config = function()
 			vim.cmd("colorscheme venomous")
+		end,
+	},
+	{
+		"arch-err/ibad.nvim",
+		enabled = true,
+		config = function()
+			vim.cmd("colorscheme ibad")
 		end,
 	},
 	{

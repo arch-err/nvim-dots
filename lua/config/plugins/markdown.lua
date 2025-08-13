@@ -175,6 +175,7 @@ return {
 	},
 	{
 		"HakonHarnes/img-clip.nvim",
+		enabled = false,
 		event = "VeryLazy",
 		opts = {
 			default = {
