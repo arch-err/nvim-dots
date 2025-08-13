@@ -1,17 +1,16 @@
-require("config.lazy")
--- require("gopher").setup()
---
-require("config.set")
-require("config.remap")
-require("config.commands")
-require("config.markdown")
+vim.opt.number = true
+vim.opt.wrap = false
+vim.opt.tabstop = 4
+vim.opt.swapfile = false
+vim.g.mapleader = " "
 
-vim.api.nvim_set_hl(0, "RenderMarkdownH1Bg", { bg = "NONE", fg = "#888888" })
-vim.api.nvim_set_hl(0, "RenderMarkdownH2Bg", { bg = "NONE", fg = "#888888" })
-vim.api.nvim_set_hl(0, "RenderMarkdownH3Bg", { bg = "NONE", fg = "#888888" })
-vim.api.nvim_set_hl(0, "RenderMarkdownH4Bg", { bg = "NONE", fg = "#888888" })
-vim.api.nvim_set_hl(0, "RenderMarkdownH5Bg", { bg = "NONE", fg = "#888888" })
-vim.api.nvim_set_hl(0, "RenderMarkdownH6Bg", { bg = "NONE", fg = "#888888" })
+vim.keymap.set("n", "<leader>r", ":update<CR>:so<CR>")
 
-vim.api.nvim_set_hl(0, "RenderMarkdownCode", { bg = "#111111" })
-vim.api.nvim_set_hl(0, "RenderMarkdownQuote", { bg = "#111111" })
+
+vim.pack.add({
+		{src = "https://github.com/arch-err/ibad.nvim"},
+})
+
+vim.cmd("colorscheme ibad")
+vim.api.nvim_set_hl(0, "CursorLine", {bg = "NONE"})
+vim.api.nvim_set_hl(0, "Normal", {bg = "NONE"})
